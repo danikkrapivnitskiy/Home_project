@@ -1,32 +1,30 @@
 package com.regiojet;
 
-import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
-import java.time.Duration;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 public class MainPage {
 
     WebDriver driver;
     Locators locators = new Locators();
+    Properties prop = new Properties();
+    FileInputStream input = new FileInputStream("src/main/resources/settings.properties");
 
-    public MainPage(WebDriver driver){
+
+    public MainPage(WebDriver driver) throws FileNotFoundException {
         this.driver=driver;
     }
 
-    @Step
-    public void searchDestination(String from, String to) throws InterruptedException {
-        driver.findElement(locators.from).sendKeys(from);
-        Thread.sleep(1000);
-        driver.findElement(locators.from).sendKeys(Keys.ENTER);
-        driver.findElement(locators.to).sendKeys(to);
-        Thread.sleep(1000);
-        driver.findElement(locators.to).sendKeys(Keys.ENTER);
-        driver.findElement(locators.departure).click();
-        driver.findElement(locators.mondayDeparture).click();
-        driver.findElement(locators.search).submit();
+    public void login() throws InterruptedException, IOException {
+        prop.load(input);
+        driver.findElement(locators.email).sendKeys(prop.getProperty("email"));
+        driver.findElement(locators.password).sendKeys(prop.getProperty("password"));
+        driver.findElement(locators.login).submit();
+        Thread.sleep(5000);
     }
 }
 

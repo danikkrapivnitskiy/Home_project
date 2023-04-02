@@ -20,79 +20,29 @@ public class SearchPage {
         this.driver = driver;
     }
 
-    public int takeDirection(By locator) {
-        List<WebElement> elements = driver.findElements(locator);
-        Assert.assertTrue("No trips available for the selected route", elements.size() > 0);
-        List<LocalTime> localTimes = new ArrayList<>();
-        List<WebElement> elements2 = driver.findElements(locators.selectItem);
-        LocalTime minTime = null;
+    public void setUpGoogleAds() {
+        openHiddenPanel();
+        openPlatform(2);
+        chooseMetrix("Google Ads");
+    }
+
+    public void openHiddenPanel() {
+        driver.findElement((locators.hiddenPanel)).click();
+    }
+
+    public void openPlatform (int i) {
+        driver.findElements((locators.panels)).get(i).click();
+    }
+
+    public void chooseMetrix(String metrix) {
+        List<WebElement> elements = driver.findElements(locators.mainMetrix);
 
         for (int i = 0; i < elements.size(); i++) {
             WebElement element = elements.get(i);
-            WebElement element2 = elements2.get(i);
-            String timeStr = element.getText();
-            String priceStr = element2.getText();
-            LocalTime time = LocalTime.parse(timeStr.substring(0, 5));
-            String numberOnly = priceStr.replaceAll("\\D+", "");
-            if (numberOnly.isEmpty()) {
-                localTimes.add(LocalTime.MAX);
-            } else localTimes.add(time);
-        }
-
-        for (LocalTime timeString : localTimes) {
-            if (!timeString.equals(LocalTime.MAX) && (minTime == null || timeString.isBefore(minTime))) {
-                minTime = timeString;
+            WebElement checkboxChecked = driver.findElement(By.xpath(locators.checkoxChecked.toString().substring(9) + "[" + (i + 1) + "]"));
+            if (!element.getText().equals(metrix) & checkboxChecked.isSelected()) {
+                checkboxChecked.click();
             }
         }
-
-        int minIndex = localTimes.indexOf(minTime);
-
-        Assertions.assertNotNull(minIndex, "No trip found with the shortest duration");
-
-        System.out.println("Departure and arrival time: " +
-                driver.findElement(By.xpath(locators.timeDepartureAndArrival.toString().substring(9) + "[" + (minIndex + 1) + "]")).getText());
-        System.out.println("Price of direction " +
-                driver.findElement(By.xpath(locators.selectItem.toString().substring(9) + "[" + (minIndex + 1) + "]")).getText());
-
-        return minIndex;
-    }
-
-    public void selectItem(int i) {
-        driver.findElement(By.xpath(locators.selectItem.toString().substring(9) + "[" + (i + 1) + "]")).click();
-    }
-
-    public int price(String value) {
-        List<WebElement> elements = driver.findElements(locators.selectItem);
-        Assert.assertTrue("No trips available for the selected route", elements.size() > 0);
-        List<Integer> priceList = new ArrayList<>();
-        Integer lowestPrice = Integer.MAX_VALUE;
-
-        for (WebElement element : elements) {
-            String priceStr = element.getText();
-            String numberOnly = priceStr.replaceAll("\\D+", "");
-            if (numberOnly.isEmpty()) {
-                priceList.add(0);
-            } else {
-                int valueOfNumber = Integer.parseInt(numberOnly);
-                priceList.add(valueOfNumber);
-            }
-        }
-
-        for (int i : priceList) {
-            if (i != 0 && i < lowestPrice) {
-                lowestPrice = i;
-            }
-        }
-
-        Assertions.assertNotNull(lowestPrice, "No trip found");
-
-        int indexPrice = priceList.indexOf(lowestPrice);
-
-        System.out.println("Departure and arrival time: " +
-                driver.findElement(By.xpath(locators.timeDepartureAndArrival.toString().substring(9) + "[" + (indexPrice + 1) + "]")).getText());
-        System.out.println("Price of direction " +
-                driver.findElement(By.xpath(locators.selectItem.toString().substring(9) + "[" + (indexPrice + 1) + "]")).getText());
-
-        return indexPrice;
     }
 }

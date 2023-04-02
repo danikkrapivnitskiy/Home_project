@@ -3,15 +3,19 @@ package com.regiojet;
 
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.io.FileNotFoundException;
 
 
-public class RegioJetFrontTest {
+public class RoivenueTest {
     static WebDriver driver;
     Locators locators = new Locators();
     Browser browser = new Browser(driver);
     MainPage mainPage = new MainPage(driver);
     SearchPage searchPage = new SearchPage(driver);
+
+    public RoivenueTest() throws FileNotFoundException {
+    }
 
     @BeforeClass
     public static void setUpDriver() throws Exception {
@@ -32,25 +36,8 @@ public class RegioJetFrontTest {
     @Test
     public void shortestDirection() throws Exception {
         browser.setUpPage();
-        mainPage.searchDestination("Ostrava", "Brno");
-
-        searchPage.selectItem(searchPage.takeDirection(locators.timeDuration));
-    }
-
-    @Test
-    public void earliestDirection() throws Exception {
-        browser.setUpPage();
-        mainPage.searchDestination("Ostrava", "Brno");
-
-        searchPage.selectItem(searchPage.takeDirection(locators.timeDepartureAndArrival));
-    }
-
-    @Test
-    public void lowestPrice() throws Exception {
-        browser.setUpPage();
-        mainPage.searchDestination("Ostrava", "Brno");
-
-        searchPage.selectItem(searchPage.price("Min"));
+        mainPage.login();
+        searchPage.setUpGoogleAds();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.regiojet;
+package com.roivenue;
 
 import org.openqa.selenium.WebDriver;
 
@@ -23,7 +23,7 @@ public class MainPage {
         prop.load(input);
         driver.findElement(locators.email).sendKeys(prop.getProperty("email"));
         driver.findElement(locators.password).sendKeys(prop.getProperty("password"));
-        driver.findElement(locators.login).submit();
+        driver.findElement(locators.login).click();
         Thread.sleep(5000);
     }
 }

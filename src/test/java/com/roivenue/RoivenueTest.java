@@ -1,4 +1,4 @@
-package com.regiojet;
+package com.roivenue;
 
 
 import org.junit.*;
@@ -34,10 +34,14 @@ public class RoivenueTest {
     }
 
     @Test
-    public void shortestDirection() throws Exception {
+    public void filtersTest() throws Exception {
         browser.setUpPage();
         mainPage.login();
         searchPage.setUpGoogleAds();
+        searchPage.hideHiddenPanel();
+        searchPage.setUpAllFilters("25/01/2020", "10/04/2020");
+        searchPage.comparingModels(1,2);
+
     }
 
 }

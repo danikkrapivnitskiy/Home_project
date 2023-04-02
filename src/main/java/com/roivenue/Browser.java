@@ -1,4 +1,4 @@
-package com.regiojet;
+package com.roivenue;
 
 import org.openqa.selenium.WebDriver;
 
@@ -13,9 +13,6 @@ public class Browser {
 
     public void setUpPage() {
         driver.get("https://app.roivenue.com/explore/process/marketingInvestment,mromi?dateRangeFrom=2020-11-01&dateRangeTo=2020-12-15");
-//        if (driver.findElement(locators.acceptCookies).isDisplayed()){
-//            driver.findElement(locators.acceptCookies).click();
-//        }
     }
 
     public void quitDriver() throws InterruptedException {
